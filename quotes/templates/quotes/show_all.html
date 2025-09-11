@@ -7,6 +7,7 @@
 {% block content %}
     <h1>All Quotes and Images</h1>
 
+    <!-- Quotes Display -->
     <ul class="quotes">
         {% for quote in quotes %}
             <li>
@@ -15,6 +16,7 @@
         {% endfor %}
     </ul>
 
+    <!-- Images Display -->
     <div class="images">
         {% for img in images %}
             <img src="{{ img }}" alt="Wayne Gretzky" />
