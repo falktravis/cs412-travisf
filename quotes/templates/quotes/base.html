@@ -1,0 +1,25 @@
+<!-- File: quotes/template/quotes/base.html -->
+<!-- Author: Travis Falk(travisf@bu.edu), 9/9/2025 -->
+<!-- Description: Base HTML Template -->
+
+
+{% load static %}
+<html lang="en">
+    <head>
+        <title>Quote</title>
+        <link rel="stylesheet" type="text/css" href="{% static 'styles.css' %}">
+    </head>
+
+    <nav>
+        <a href="{% url 'home' %}">Home</a>
+        <a href="{% url 'quote' %}">Quote</a>
+        <a href="{% url 'about' %}">About</a>
+        <a href="{% url 'show_all' %}">Show All</a>
+    </nav>
+
+    <body>
+        {% block content %}
+        {% endblock %}
+    </body>
+
+</html>

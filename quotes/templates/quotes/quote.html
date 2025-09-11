@@ -1,0 +1,11 @@
+<!-- File: quotes/template/quotes/quote.html -->
+<!-- Author: Travis Falk(travisf@bu.edu), 9/9/2025 -->
+<!-- Description: Quote/Home Page Template -->
+
+{% extends 'quotes/base.html' %}
+
+{% block content %}
+    <h1>Random Quote</h1>
+    <p>{{ quote }}</p>
+    <img src="{{ image }}" alt="Wayne Gretzky" />
+{% endblock %}

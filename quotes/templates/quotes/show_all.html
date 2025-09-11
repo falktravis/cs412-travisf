@@ -1,0 +1,23 @@
+<!-- File: quotes/template/quotes/show_all.html -->
+<!-- Author: Travis Falk(travisf@bu.edu), 9/11/2025 -->
+<!-- Description: Show All Page Template -->
+
+{% extends 'quotes/base.html' %}
+
+{% block content %}
+    <h1>All Quotes and Images</h1>
+
+    <ul class="quotes">
+        {% for quote in quotes %}
+            <li>
+                <p>{{ quote }}</p>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <div class="images">
+        {% for img in images %}
+            <img src="{{ img }}" alt="Wayne Gretzky" />
+        {% endfor %}
+    </div>
+{% endblock %}

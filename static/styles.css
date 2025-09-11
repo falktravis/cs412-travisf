@@ -1,0 +1,45 @@
+/* 
+    File: urls.py
+    Author: Travis Falk 
+    Description: Styles for the Django Quotes Application 
+*/
+
+/* Nav Bar */
+nav{
+    width: 100%;
+    background-color: white;
+    padding: 4vh;
+}
+
+nav a{
+    text-decoration: none;
+    color: black;
+    padding: 15px;
+    font-weight: bold;
+    font-size: 18px;
+    transition: 300ms ease-in-out;
+    margin: 0 1vw;
+}
+
+nav a:hover{
+    font-size: 24px;
+}
+
+/* General Body */
+
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+h1{
+    text-align: center;
+    margin-top: 5vh;
+}
+
+/* Show All Page */
+ul{
+    list-style-type: none;
+    padding: 0;
+}
