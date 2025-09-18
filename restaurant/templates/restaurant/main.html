@@ -1,0 +1,26 @@
+<!-- File: restaurant/template/restaurant/main.html -->
+<!-- Author: Travis Falk(travisf@bu.edu), 9/17/2025 -->
+<!-- Description: Main Page Template -->
+
+{% extends 'restaurant/base.html' %}
+
+{% block content %}
+    <div class="home-header">
+        <h1>Welcome to Giacomo’s</h1>
+        <p>“The 20 Best Italian Restaurants In The US”</p>
+    </div>
+    <img id="home-img" src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1b/cf/5f/76/nice.jpg?w=900&h=500&s=1" alt="Giacomo's Restaurant" />
+    <div class="info">
+        <p><strong>Address:</strong> 355 Hanover St, Boston, MA 02113</p>
+        <strong>Hours</strong>
+        <ul>
+            <li>Monday: 5:00 PM - 10:00 PM</li>
+            <li>Tuesday: 5:00 PM - 10:00 PM</li>
+            <li>Wednesday: 5:00 PM - 10:00 PM</li>
+            <li>Thursday: 5:00 PM - 10:00 PM</li>
+            <li>Friday: 5:00 PM - 11:00 PM</li>
+            <li>Saturday: 12:00 PM - 11:00 PM</li>
+            <li>Sunday: 12:00 PM - 10:00 PM</li>
+        </ul>
+    </div>
+{% endblock %}

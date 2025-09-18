@@ -1,0 +1,25 @@
+<!-- File: restaurant/template/restaurant/base.html -->
+<!-- Author: Travis Falk(travisf@bu.edu), 9/17/2025 -->
+<!-- Description: Base HTML Template -->    
+
+
+{% load static %}
+<html lang="en">
+    <head>
+        <title>Giacomo’s</title>
+        <link rel="stylesheet" type="text/css" href="{% static 'restaurant_styles.css' %}">
+    </head>
+
+        <!-- Navigation Bar -->
+    <nav>
+        <a href="{% url 'home' %}">Home</a>
+        <a href="{% url 'order' %}">Order</a>
+    </nav>
+
+    <!-- Main Content -->
+    <body>
+        {% block content %}
+        {% endblock %}
+    </body>
+
+</html>

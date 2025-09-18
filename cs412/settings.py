@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'quotes', # Assignment #1
+    'restaurant' # Assignemnt #2
 ]
 
 MIDDLEWARE = [

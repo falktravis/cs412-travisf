@@ -1,0 +1,38 @@
+<!-- File: restaurant/template/restaurant/order.html -->
+<!-- Author: Travis Falk(travisf@bu.edu), 9/17/2025 -->
+<!-- Description: Order Page Template -->
+
+{% extends 'restaurant/base.html' %}
+
+{% block content %}
+    <h2>Place Your Order</h2>
+    <form action="{% url 'confirmation' %}" method="POST">
+        {% csrf_token %}
+
+        <h3>Items:</h3>
+        <ul class="items">
+            <li><input type="checkbox" name="spaghetti">$15 Spaghetti
+                <ul>
+                    <li><input type="checkbox" name="meatballs">Add Meatballs (+$3)</li>
+                    <li><input type="checkbox" name="sausage">Add Sausage (+$3)</li>
+                </ul>
+            </li>
+            <li><input type="checkbox" name="lasagna">$12 Lasagna</li>
+            <li><input type="checkbox" name="fettuccine">$14 Fettuccine Alfredo</li>
+            <li><input type="checkbox" name="special"><strong>Daily Special: </strong>$18 {{special}}</li>
+        </ul>
+
+        <h3>Special Instructions:</h3>
+        <textarea name="instructions" placeholder="Special requests..."></textarea>
+
+        <h3>Contact:</h3>
+        <ul>
+            <li>Name:<input type="text" name="name"></li>
+            <li>Email:<input type="email" name="email"></li>
+            <li>Phone:<input type="tel" name="phone"></li>
+        </ul>
+
+        
+        <input type="submit" value="Submit Order">
+    </form>
+{% endblock %}
