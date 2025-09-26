@@ -1,0 +1,22 @@
+<!-- File: mini_insta/templates/mini_insta/show_profile.html -->
+<!-- Author: Travis Falk(travisf@bu.edu), 9/26/2025 -->
+<!-- Description: Show Profile Template -->
+
+
+
+{% extends 'mini_insta/base.html' %}
+
+{% block content %}
+<div class="profile-detail">
+    <h2>{{ profile.display_name }} (@{{ profile.username }})</h2>
+    <img src="{{ profile.profile_image_url }}">
+    
+    <div class="profile-info">
+        <p class="bio-text">"{{ profile.bio_text }}"</p>
+        <p><strong>Joined on:</strong> {{ profile.join_date|date:"F j, Y" }}</p>
+        <p><strong>Following:</strong> Coming Soon!</p>
+        <p><strong>Followers:</strong> Coming Soon!</p>
+        <p><strong>Posts:</strong> Coming Soon!</p>
+    </div>
+</div>
+{% endblock %}

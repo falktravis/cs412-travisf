@@ -1,0 +1,29 @@
+<!-- File: mini_insta/templates/mini_insta/base.html -->
+<!-- Author: Travis Falk(travisf@bu.edu), 9/26/2025 -->
+<!-- Description: Base Template for Mini Insta -->
+
+
+{% load static %}
+<html lang="en">
+    <head>
+        <title>Mini Insta</title>
+        <link rel="stylesheet" type="text/css" href="{% static 'mini_insta_styles.css' %}">
+    </head>
+
+        <!-- Navigation Bar -->
+    <nav>
+        <a href="{% url 'show_all_profiles' %}">Home</a>
+    </nav>
+
+    <!-- Main Content -->
+    <body>
+        <main>
+            {% block content %}
+            {% endblock %}
+        </main>
+    </body>
+
+    <footer>
+        <a href="{% url 'show_all_profiles' %}">Back to Profiles</a>
+    </footer>
+</html>
