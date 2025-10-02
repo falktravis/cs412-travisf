@@ -1,0 +1,22 @@
+<!-- File: mini_insta/templates/mini_insta/show_post.html -->
+<!-- Author: Travis Falk(travisf@bu.edu), 9/30/2025 -->
+<!-- Description: Show Post Template -->
+
+
+
+{% extends 'mini_insta/base.html' %}
+
+{% block content %}
+<div class="post-detail">
+    <p>{{ post.caption }}</p>
+    <p><strong>Posted on:</strong> {{ post.timestamp }}</p>
+
+    <div class="post-photos">
+        {% for photo in post.get_all_photos %}
+            <img src="{{ photo.image_url }}">
+        {% empty %}
+            <p>No photos available.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

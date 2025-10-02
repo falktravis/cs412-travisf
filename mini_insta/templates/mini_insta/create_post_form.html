@@ -1,0 +1,13 @@
+
+
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Create a New Post</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_table }}
+    <input type="cancel" name="cancel" value="Cancel">
+    <input type="submit" name="submit" value="Submit">
+  </form>
+{% endblock %}
