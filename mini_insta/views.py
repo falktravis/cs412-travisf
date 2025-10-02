@@ -3,10 +3,10 @@
 # Description: View definitions for mini_insta app
 
 from django.shortcuts import render
-from django.views.generic import ListView, DetailView
-from .models import Profile
-from .models import Post
-
+from django.views.generic import ListView, DetailView, CreateView
+from .models import Profile, Post, Photo
+from .forms import CreatePostForm
+from django.urls import reverse
 
 # Create your views here.
 class ProfileListView(ListView):
@@ -29,3 +29,59 @@ class PostDetailView(DetailView):
     model = Post
     template_name = 'mini_insta/show_post.html'
     context_object_name = 'post'
+
+class CreatePostView(CreateView):
+    '''Define a view to create a new post'''
+
+    form_class = CreatePostForm
+    template_name = 'mini_insta/create_post_form.html'
+
+    def get_context_data(self):
+        '''Return the dictionary of context variables for use in the template.'''
+        
+        # calling the superclass method
+        context = super().get_context_data()
+        
+        # find/add the profile to the context data
+        # retrieve the PK from the URL pattern
+        pk = self.kwargs['pk']
+        profile = Profile.objects.get(pk=pk)
+        
+        # add this profile into the context dictionary:
+        context['profile'] = profile
+        return context
+        
+        
+    def form_valid(self, form):
+        '''This method handles the form submission and saves the 
+        new object to the Django database.
+        We need to add the foreign key (of the Profile) to the Post
+        object before saving it to the database.
+        '''
+        
+        # retrieve the PK from the URL pattern
+        pk = self.kwargs['pk']
+        profile = Profile.objects.get(pk=pk)
+        # attach this profile to the post
+        form.instance.profile = profile # set the FK
+        
+        # delegate the work to the superclass method form_valid:
+        response = super().form_valid(form)
+        
+        # create a new Photo for this post using the image_url from the form
+        image_url = self.request.POST.get('image_url')
+        if image_url:
+            Photo.objects.create(
+                post=self.object,
+                image_url=image_url
+            )
+        
+        return response
+
+    def get_success_url(self):
+        '''Provide a URL to redirect to after creating a new Post.'''
+ 
+        # create and return a URL:
+        pk = self.kwargs['pk']
+        # call reverse to generate the URL to the profile
+        return reverse('show_profile', kwargs={'pk':pk})

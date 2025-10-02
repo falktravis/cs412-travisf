@@ -174,3 +174,52 @@ footer a:hover {
     background-color: #e1306c;
     color: white;
 }
+
+/* Create Post Form Styles */
+.create-post-container {
+    max-width: 500px;
+    margin: 0 auto;
+    background: white;
+    padding: 20px;
+    border: 1px solid #ddd;
+}
+
+.create-post-form {
+    width: 100%;
+}
+
+.create-post-buttons {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.submit-btn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    cursor: pointer;
+}
+
+.cancel-btn {
+    background-color: #f44336;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+/* Post Detail Styles */
+.post-detail {
+    max-width: 500px;
+    margin: 0 auto;
+    background: white;
+    padding: 20px;
+    border: 1px solid #ddd;
+}
+
+.post-photos img {
+    max-width: 100%;
+    border: 1px solid #ccc;
+}
