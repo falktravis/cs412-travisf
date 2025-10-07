@@ -4,8 +4,9 @@
 
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic.edit import UpdateView
 from .models import Profile, Post, Photo
-from .forms import CreatePostForm
+from .forms import CreatePostForm, UpdateProfileForm
 from django.urls import reverse
 
 # Create your views here.
@@ -67,13 +68,12 @@ class CreatePostView(CreateView):
         
         # delegate the work to the superclass method form_valid:
         response = super().form_valid(form)
-        
-        # create a new Photo for this post using the image_url from the form
-        image_url = self.request.POST.get('image_url')
-        if image_url:
+
+        files = self.request.FILES.getlist('files')
+        for f in files:
             Photo.objects.create(
                 post=self.object,
-                image_url=image_url
+                image_file=f
             )
         
         return response
@@ -85,3 +85,11 @@ class CreatePostView(CreateView):
         pk = self.kwargs['pk']
         # call reverse to generate the URL to the profile
         return reverse('show_profile', kwargs={'pk':pk})
+
+
+class UpdateProfileView(UpdateView):
+    '''Update an existing Profile.'''
+
+    model = Profile
+    form_class = UpdateProfileForm
+    template_name = 'mini_insta/update_profile_form.html'

@@ -13,7 +13,7 @@
 
     <div class="post-photos">
         {% for photo in post.get_all_photos %}
-            <img src="{{ photo.image_url }}">
+            <img src="{{ photo.get_image_url }}">
         {% empty %}
             <p>No photos available.</p>
         {% endfor %}

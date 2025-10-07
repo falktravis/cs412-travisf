@@ -16,6 +16,7 @@
         <p><strong>Joined on:</strong> {{ profile.join_date|date:"F j, Y" }}</p>
         <p><strong>Following:</strong> Coming Soon!</p>
         <p><strong>Followers:</strong> Coming Soon!</p>
+        <p><a href="{% url 'update_profile' profile.pk %}">Update Profile</a></p>
         
         <!-- Display user's posts   -->
         <h3>Posts</h3>
@@ -24,7 +25,7 @@
                 <a class="post" href="{% url 'show_post' post.pk %}">
                     <p>{{ post.caption }}</p>
                     {% if post.get_all_photos %}
-                    <img src="{{ post.get_all_photos.first.image_url }}">
+                    <img src="{{ post.get_all_photos.first.get_image_url }}">
                     {% else %}
                     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/1024px-No_image_available.svg.png">
                     {% endif %}
