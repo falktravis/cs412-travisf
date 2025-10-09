@@ -4,9 +4,9 @@
 
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView, CreateView
-from django.views.generic.edit import UpdateView
+from django.views.generic.edit import UpdateView, DeleteView
 from .models import Profile, Post, Photo
-from .forms import CreatePostForm, UpdateProfileForm
+from .forms import CreatePostForm, UpdateProfileForm, UpdatePostForm
 from django.urls import reverse
 
 # Create your views here.
@@ -39,15 +39,15 @@ class CreatePostView(CreateView):
 
     def get_context_data(self):
         '''Return the dictionary of context variables for use in the template.'''
-        
+
         # calling the superclass method
         context = super().get_context_data()
-        
+
         # find/add the profile to the context data
         # retrieve the PK from the URL pattern
         pk = self.kwargs['pk']
         profile = Profile.objects.get(pk=pk)
-        
+
         # add this profile into the context dictionary:
         context['profile'] = profile
         return context
@@ -93,3 +93,55 @@ class UpdateProfileView(UpdateView):
     model = Profile
     form_class = UpdateProfileForm
     template_name = 'mini_insta/update_profile_form.html'
+
+
+class UpdatePostView(UpdateView):
+    '''Update an existing Post (caption).'''
+
+    model = Post
+    form_class = UpdatePostForm
+    template_name = 'mini_insta/update_post_form.html'
+
+    def get_success_url(self):
+        '''Provide a URL to redirect to after updating a Post.'''
+
+        # create and return a URL:
+        pk = self.kwargs['pk']
+        # call reverse to generate the URL to the profile
+        return reverse('show_post', kwargs={'pk':pk})
+
+
+class DeletePostView(DeleteView):
+    '''Delete a Post.'''
+
+    model = Post
+    template_name = 'mini_insta/delete_post_form.html'
+    context_object_name = 'post'
+
+    def get_context_data(self, **kwargs):
+        '''Return the dictionary of context variables for use in the template.'''
+
+        # calling the superclass method
+        context = super().get_context_data(**kwargs)
+
+        # find/add the profile to the context data
+        pk = self.kwargs['pk']
+        post = Post.objects.get(pk=pk)
+        profile = post.profile
+
+        # add this profile into the context dictionary:
+        context['post'] = post
+        context['profile'] = profile
+        return context
+
+    def get_success_url(self):
+        '''Provide a URL to redirect to after deleting a Post.'''
+
+        # find the post associated with this view
+        pk = self.kwargs.get('pk')
+        post = Post.objects.get(pk=pk)
+
+        # find the profile associated with this post
+        profile = post.profile
+
+        return reverse('show_profile', kwargs={'pk': profile.pk})

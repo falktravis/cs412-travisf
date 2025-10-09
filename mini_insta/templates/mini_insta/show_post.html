@@ -10,6 +10,10 @@
 <div class="post-detail">
     <p>{{ post.caption }}</p>
     <p><strong>Posted on:</strong> {{ post.timestamp }}</p>
+    <p>
+        <a href="{% url 'update_post' post.pk %}">Update</a> |
+        <a href="{% url 'delete_post' post.pk %}">Delete</a>
+    </p>
 
     <div class="post-photos">
         {% for photo in post.get_all_photos %}

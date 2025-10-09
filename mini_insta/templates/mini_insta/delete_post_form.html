@@ -1,0 +1,18 @@
+<!-- File: mini_insta/templates/mini_insta/delete_post_form.html -->
+<!-- Author: Travis Falk(travisf@bu.edu), 10/7/2025 -->
+<!-- Description: Delete Post Form Template -->
+
+{% extends 'mini_insta/base.html' %}
+
+{% block content %}
+<h3>Delete Post?</h3>
+<p>{{ post.caption }}</p>
+
+<form action="{% url 'delete_post' post.pk %}" method="post">
+    {% csrf_token %}
+    <input type="submit" value="Confirm Delete">
+</form>
+<form action="{% url 'show_profile' profile.pk %}" method="get">
+    <input type="submit" value="Cancel">
+</form>
+{% endblock %}
