@@ -2,9 +2,7 @@
 # Author: Travis Falk(travisf@bu.edu), 9/25/2025
 # Description: View definitions for mini_insta app
 
-from django.shortcuts import render
-from django.views.generic import ListView, DetailView, CreateView
-from django.views.generic.edit import UpdateView, DeleteView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Profile, Post, Photo
 from .forms import CreatePostForm, UpdateProfileForm, UpdatePostForm
 from django.urls import reverse
