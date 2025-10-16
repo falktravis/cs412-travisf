@@ -1,0 +1,24 @@
+<!-- File: mini_insta/templates/mini_insta/show_following.html -->
+<!-- Author: Travis Falk(travisf@bu.edu), 10/16/2025 -->
+<!-- Description: Show Following Template -->
+
+{% extends 'mini_insta/base.html' %}
+
+{% block content %}
+<div class="following-detail">
+    <h2>{{ profile.display_name }} is Following</h2>
+    
+    <div class="following-list">
+        {% for followed_profile in profile.get_following %}
+            <div class="following-item">
+                <a href="{% url 'show_profile' followed_profile.pk %}">
+                    <img src="{{ followed_profile.profile_image_url }}" alt="{{ followed_profile.display_name }}">
+                    <p><strong>{{ followed_profile.display_name }}</strong> (@{{ followed_profile.username }})</p>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+    
+    <p><a href="{% url 'show_profile' profile.pk %}">Back to Profile</a></p>
+</div>
+{% endblock %}

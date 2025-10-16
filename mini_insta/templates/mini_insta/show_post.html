@@ -8,19 +8,30 @@
 
 {% block content %}
 <div class="post-detail">
+    <div class="post-photos">
+        {% for photo in post.get_all_photos %}
+            <img src="{{ photo.get_image_url }}">
+        {% endfor %}
+    </div>
+    
+    <p><strong>{{ post.get_likes.count }} likes</strong></p>
+    
     <p>{{ post.caption }}</p>
+    
+    <div class="post-comments">
+        <h4>Comments</h4>
+        {% for comment in post.get_all_comments %}
+            <div class="comment">
+                <p><strong>{{ comment.profile.display_name }}</strong>: {{ comment.text }}</p>
+                <p class="comment-timestamp">{{ comment.timestamp|date:"F j, Y g:i A" }}</p>
+            </div>
+        {% endfor %}
+    </div>
+    
     <p><strong>Posted on:</strong> {{ post.timestamp }}</p>
     <p>
         <a href="{% url 'update_post' post.pk %}">Update</a> |
         <a href="{% url 'delete_post' post.pk %}">Delete</a>
     </p>
-
-    <div class="post-photos">
-        {% for photo in post.get_all_photos %}
-            <img src="{{ photo.get_image_url }}">
-        {% empty %}
-            <p>No photos available.</p>
-        {% endfor %}
-    </div>
 </div>
 {% endblock %}

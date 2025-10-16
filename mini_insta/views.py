@@ -29,6 +29,20 @@ class PostDetailView(DetailView):
     template_name = 'mini_insta/show_post.html'
     context_object_name = 'post'
 
+class ShowFollowersDetailView(DetailView):
+    '''Define a view to show followers for a profile'''
+
+    model = Profile
+    template_name = 'mini_insta/show_followers.html'
+    context_object_name = 'profile'
+
+class ShowFollowingDetailView(DetailView):
+    '''Define a view to show profiles that a profile is following'''
+
+    model = Profile
+    template_name = 'mini_insta/show_following.html'
+    context_object_name = 'profile'
+
 class CreatePostView(CreateView):
     '''Define a view to create a new post'''
 

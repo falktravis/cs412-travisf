@@ -1,0 +1,24 @@
+<!-- File: mini_insta/templates/mini_insta/show_followers.html -->
+<!-- Author: Travis Falk(travisf@bu.edu), 10/16/2025 -->
+<!-- Description: Show Followers Template -->
+
+{% extends 'mini_insta/base.html' %}
+
+{% block content %}
+<div class="followers-detail">
+    <h2>Followers of {{ profile.display_name }}</h2>
+    
+    <div class="followers-list">
+        {% for follower in profile.get_followers %}
+            <div class="follower-item">
+                <a href="{% url 'show_profile' follower.pk %}">
+                    <img src="{{ follower.profile_image_url }}" alt="{{ follower.display_name }}">
+                    <p><strong>{{ follower.display_name }}</strong> (@{{ follower.username }})</p>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+    
+    <p><a href="{% url 'show_profile' profile.pk %}">Back to Profile</a></p>
+</div>
+{% endblock %}

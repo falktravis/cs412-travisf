@@ -14,8 +14,8 @@
     <div class="profile-info">
         <p class="bio-text">"{{ profile.bio_text }}"</p>
         <p><strong>Joined on:</strong> {{ profile.join_date|date:"F j, Y" }}</p>
-        <p><strong>Following:</strong> Coming Soon!</p>
-        <p><strong>Followers:</strong> Coming Soon!</p>
+        <p><strong>Following:</strong> <a href="{% url 'show_following' profile.pk %}">{{ profile.get_num_following }}</a></p>
+        <p><strong>Followers:</strong> <a href="{% url 'show_followers' profile.pk %}">{{ profile.get_num_followers }}</a></p>
         <p><a href="{% url 'update_profile' profile.pk %}">Update Profile</a></p>
         
         <!-- Display user's posts   -->
@@ -30,8 +30,6 @@
                     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/1024px-No_image_available.svg.png">
                     {% endif %}
                 </a>
-            {% empty %}
-                <p>No posts yet.</p>
             {% endfor %}
         </div>
     </div>
