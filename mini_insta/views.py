@@ -3,6 +3,7 @@
 # Description: View definitions for mini_insta app
 
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.shortcuts import render
 from .models import Profile, Post, Photo
 from .forms import CreatePostForm, UpdateProfileForm, UpdatePostForm
 from django.urls import reverse
@@ -42,6 +43,67 @@ class ShowFollowingDetailView(DetailView):
     model = Profile
     template_name = 'mini_insta/show_following.html'
     context_object_name = 'profile'
+
+class PostFeedListView(ListView):
+    '''Define a view to show the post feed for a profile'''
+
+    template_name = 'mini_insta/show_feed.html'
+    context_object_name = 'posts'
+
+    def get_queryset(self):
+        '''Return the QuerySet of posts for the feed'''
+        pk = self.kwargs['pk']
+        profile = Profile.objects.get(pk=pk)
+        return profile.get_post_feed()
+    
+    def get_context_data(self, **kwargs):
+        '''Add the profile to the context data'''
+        context = super().get_context_data(**kwargs)
+        pk = self.kwargs['pk']
+        profile = Profile.objects.get(pk=pk)
+        context['profile'] = profile
+        return context
+
+class SearchView(ListView):
+    '''Define a view to search for profiles and posts'''
+
+    template_name = 'mini_insta/search_results.html'
+    context_object_name = 'posts'
+
+    def dispatch(self, request, *args, **kwargs):
+        '''Handle the request and return the appropriate template'''
+        # Check if query is present in GET parameters
+        if 'query' not in self.request.GET:
+            pk = self.kwargs['pk']
+            profile = Profile.objects.get(pk=pk)
+            return render(request, 'mini_insta/search.html', {'profile': profile})
+        else:
+            # Continue with ListView processing
+            return super().dispatch(request, *args, **kwargs)
+    
+    def get_queryset(self):
+        '''Return the QuerySet of posts that match the search query'''
+        query = self.request.GET.get('query', '')
+        return Post.objects.filter(caption__icontains=query)
+    
+    def get_context_data(self, **kwargs):
+        '''Add additional context data for the template'''
+        context = super().get_context_data(**kwargs)
+        
+        # Get the profile from URL
+        pk = self.kwargs['pk']
+        profile = Profile.objects.get(pk=pk)
+        context['profile'] = profile
+        
+        # Get the query
+        query = self.request.GET.get('query', '')
+        context['query'] = query
+        
+        # Get matching profiles
+        matching_profiles = Profile.objects.filter(username__icontains=query) | Profile.objects.filter(display_name__icontains=query) | Profile.objects.filter(bio_text__icontains=query)
+        context['profiles'] = matching_profiles
+        
+        return context
 
 class CreatePostView(CreateView):
     '''Define a view to create a new post'''

@@ -1,0 +1,46 @@
+<!-- File: mini_insta/templates/mini_insta/show_feed.html -->
+<!-- Author: Travis Falk(travisf@bu.edu), 10/16/2025 -->
+<!-- Description: Show Post Feed Template -->
+
+{% extends 'mini_insta/base.html' %}
+
+{% block content %}
+<div class="feed-container">
+    <h2>{{ profile.display_name }}'s Feed</h2>
+    
+    <div class="feed-posts">
+        {% for post in posts %}
+            <div class="feed-post">
+                <div class="feed-post-header">
+                    <img src="{{ post.profile.profile_image_url }}" alt="{{ post.profile.display_name }}">
+                    <a href="{% url 'show_profile' post.profile.pk %}">
+                        <strong>{{ post.profile.display_name }}</strong>
+                    </a>
+                </div>
+                
+                <div class="feed-post-photo">
+                    {% if post.get_all_photos %}
+                        <img src="{{ post.get_all_photos.first.get_image_url }}" alt="Post photo">
+                    {% endif %}
+                </div>
+                
+                <div class="feed-post-content">
+                    <p><strong>{{ post.get_likes.count }} likes</strong></p>
+                    <p><strong>{{ post.profile.display_name }}</strong> {{ post.caption }}</p>
+                    
+                    <div class="feed-post-comments">
+                        {% for comment in post.get_all_comments %}
+                            <p><strong>{{ comment.profile.display_name }}</strong> {{ comment.text }}</p>
+                        {% endfor %}
+                    </div>
+                    
+                    <p class="feed-post-timestamp">{{ post.timestamp|date:"F j, Y" }}</p>
+                    <p><a href="{% url 'show_post' post.pk %}">View Post</a></p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    
+    <p><a href="{% url 'show_profile' profile.pk %}">Back to Profile</a></p>
+</div>
+{% endblock %}

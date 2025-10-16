@@ -1,0 +1,41 @@
+<!-- File: mini_insta/templates/mini_insta/search_results.html -->
+<!-- Author: Travis Falk(travisf@bu.edu), 10/16/2025 -->
+<!-- Description: Search Results Template -->
+
+{% extends 'mini_insta/base.html' %}
+
+{% block content %}
+<div class="search-results-container">
+    <h2>Search Results for "{{ query }}"</h2>
+    
+    <div class="results-section">
+        <h3>Profiles</h3>
+        <div class="profiles-grid">
+            {% for profile_result in profiles %}
+                <a class="profile-card" href="{% url 'show_profile' profile_result.pk %}">
+                    <img src="{{ profile_result.profile_image_url }}">
+                    <h2>{{ profile_result.display_name }}</h2>
+                    <p>@{{ profile_result.username }}</p>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <div class="results-section">
+        <h3>Posts</h3>
+        <div class="posts-grid">
+            {% for post in posts %}
+                <a class="post-card" href="{% url 'show_post' post.pk %}">
+                    {% if post.get_all_photos %}
+                        <img src="{{ post.get_all_photos.first.get_image_url }}">
+                    {% endif %}
+                    <p><strong>{{ post.profile.display_name }}</strong></p>
+                    <p>{{ post.caption }}</p>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <p><a href="{% url 'search' profile.pk %}">New Search</a> | <a href="{% url 'show_profile' profile.pk %}">Back to Profile</a></p>
+</div>
+{% endblock %}

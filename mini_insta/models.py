@@ -28,9 +28,7 @@ class Profile(models.Model):
     
     def get_followers(self):
         """Return a list of Profile objects who are followers of this profile."""
-        # Get all Follow objects where this profile is being followed
         follows = Follow.objects.filter(profile=self)
-        # Return a list of the follower profiles
         return [follow.follower_profile for follow in follows]
     
     def get_num_followers(self):
@@ -39,14 +37,17 @@ class Profile(models.Model):
     
     def get_following(self):
         """Return a list of Profile objects that this profile is following."""
-        # Get all Follow objects where this profile is the follower
         follows = Follow.objects.filter(follower_profile=self)
-        # Return a list of the profiles being followed
         return [follow.profile for follow in follows]
     
     def get_num_following(self):
         """Return the count of profiles being followed by this profile."""
         return len(self.get_following())
+    
+    def get_post_feed(self):
+        """Return a QuerySet of Posts from profiles being followed by this profile, ordered by most recent."""
+        following_profiles = self.get_following()
+        return Post.objects.filter(profile__in=following_profiles).order_by('-timestamp')
     
 class Post(models.Model):
     """Post model to store user posts."""

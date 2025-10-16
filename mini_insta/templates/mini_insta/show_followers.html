@@ -13,12 +13,15 @@
             <div class="follower-item">
                 <a href="{% url 'show_profile' follower.pk %}">
                     <img src="{{ follower.profile_image_url }}" alt="{{ follower.display_name }}">
-                    <p><strong>{{ follower.display_name }}</strong> (@{{ follower.username }})</p>
+                    <p><strong>{{ follower.display_name }}</strong></p>
+                    <p style="color: #8e8e8e;">@{{ follower.username }}</p>
                 </a>
             </div>
+        {% empty %}
+            <p style="grid-column: 1/-1; text-align: center; color: #8e8e8e; padding: 40px;">No followers yet.</p>
         {% endfor %}
     </div>
     
-    <p><a href="{% url 'show_profile' profile.pk %}">Back to Profile</a></p>
+    <p><a href="{% url 'show_profile' profile.pk %}">← Back to Profile</a></p>
 </div>
 {% endblock %}
