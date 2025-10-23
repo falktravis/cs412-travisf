@@ -1,4 +1,4 @@
-# File: views.py
+# File: forms.py
 # Author: Travis Falk(travisf@bu.edu), 10/2/2025
 # Description: Form definitions for mini_insta app
 
@@ -27,3 +27,11 @@ class UpdatePostForm(forms.ModelForm):
     class Meta:
         model = Post
         fields = ['caption']
+
+
+class CreateProfileForm(forms.ModelForm):
+    '''Form to create a new profile.'''
+
+    class Meta:
+        model = Profile
+        fields = ['username', 'display_name', 'profile_image_url', 'bio_text']

@@ -16,9 +16,19 @@
         <p><strong>Joined on:</strong> {{ profile.join_date|date:"F j, Y" }}</p>
         <p><strong>Following:</strong> <a href="{% url 'show_following' profile.pk %}">{{ profile.get_num_following }}</a></p>
         <p><strong>Followers:</strong> <a href="{% url 'show_followers' profile.pk %}">{{ profile.get_num_followers }}</a></p>
-        <p><a href="{% url 'update_profile' profile.pk %}">Update Profile</a></p>
         
-        <!-- Display user's posts   -->
+        {% if request.user.is_authenticated and profile.user == request.user %}
+            <p><a href="{% url 'update_profile' %}">Update Profile</a></p>
+        {% endif %}
+        
+        {% if request.user.is_authenticated and profile.user != request.user %}
+            {% if is_following %}
+                <p><a href="{% url 'delete_follow' profile.pk %}"><button>Unfollow</button></a></p>
+            {% else %}
+                <p><a href="{% url 'follow_profile' profile.pk %}"><button>Follow</button></a></p>
+            {% endif %}
+        {% endif %}
+        
         <h3>Posts</h3>
         <div class="posts">
             {% for post in profile.get_all_posts %}

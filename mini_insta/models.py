@@ -5,10 +5,12 @@
 
 from django.db import models
 from django.urls import reverse
+from django.contrib.auth.models import User
 
 # Create your models here.
 class Profile(models.Model):
     """Profile model to store user profile information."""
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     username = models.TextField(blank=True)
     display_name = models.TextField(blank=True)
     profile_image_url = models.URLField(blank=True)
@@ -49,6 +51,13 @@ class Profile(models.Model):
         following_profiles = self.get_following()
         return Post.objects.filter(profile__in=following_profiles).order_by('-timestamp')
     
+    def is_following(self, other_profile):
+        """Check if this profile is following another profile."""
+        return Follow.objects.filter(
+            follower_profile=self,
+            profile=other_profile
+        ).exists()
+    
 class Post(models.Model):
     """Post model to store user posts."""
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
@@ -69,6 +78,13 @@ class Post(models.Model):
     def get_likes(self):
         """Retrieve all likes associated with this post."""
         return Like.objects.filter(post=self)
+    
+    def is_liked_by(self, profile):
+        """Check if this post is liked by a specific profile."""
+        return Like.objects.filter(
+            post=self,
+            profile=profile
+        ).exists()
     
 class Photo(models.Model):
     """Photo model to store photos associated with posts."""

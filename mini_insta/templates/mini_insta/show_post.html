@@ -16,6 +16,14 @@
     
     <p><strong>{{ post.get_likes.count }} likes</strong></p>
     
+    {% if request.user.is_authenticated and not is_owner %}
+        {% if is_liked %}
+            <p><a href="{% url 'delete_like' post.pk %}"><button>Unlike</button></a></p>
+        {% else %}
+            <p><a href="{% url 'like_post' post.pk %}"><button>Like</button></a></p>
+        {% endif %}
+    {% endif %}
+    
     <p>{{ post.caption }}</p>
     
     <div class="post-comments">
@@ -29,9 +37,12 @@
     </div>
     
     <p><strong>Posted on:</strong> {{ post.timestamp }}</p>
-    <p>
-        <a href="{% url 'update_post' post.pk %}">Update</a> |
-        <a href="{% url 'delete_post' post.pk %}">Delete</a>
-    </p>
+    
+    {% if request.user.is_authenticated and is_owner %}
+        <p>
+            <a href="{% url 'update_post' post.pk %}">Update</a> |
+            <a href="{% url 'delete_post' post.pk %}">Delete</a>
+        </p>
+    {% endif %}
 </div>
 {% endblock %}

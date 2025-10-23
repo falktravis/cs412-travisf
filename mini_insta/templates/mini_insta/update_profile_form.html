@@ -7,7 +7,7 @@
 {% block content %}
 <div class="update-profile-container">
   <h2>Update Profile</h2>
-  <form method="post" enctype="multipart/form-data" action="{% url 'update_profile' profile.pk %}" class="update-profile-form">
+  <form method="post" enctype="multipart/form-data" action="{% url 'update_profile' %}" class="update-profile-form">
     {% csrf_token %}
     <table>
       {{ form.as_table }}
