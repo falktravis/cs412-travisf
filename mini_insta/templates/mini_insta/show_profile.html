@@ -23,9 +23,9 @@
         
         {% if request.user.is_authenticated and profile.user != request.user %}
             {% if is_following %}
-                <p><a href="{% url 'delete_follow' profile.pk %}"><button>Unfollow</button></a></p>
+                <p><a href="{% url 'delete_follow' profile.pk %}"><button class="unfollow-btn">Unfollow</button></a></p>
             {% else %}
-                <p><a href="{% url 'follow_profile' profile.pk %}"><button>Follow</button></a></p>
+                <p><a href="{% url 'follow_profile' profile.pk %}"><button class="follow-btn">Follow</button></a></p>
             {% endif %}
         {% endif %}
         
