@@ -1,0 +1,166 @@
+/* 
+    File: voter_analytics_styles.css
+    Date: 10/29/2025
+    Author: Travis Falk 
+    Description: Styles for the Django Voter Analytics Application 
+*/
+
+/* Nav Bar */
+nav{
+    width: 100%;
+    background-color: white;
+    padding: 4vh 0;
+}
+
+nav ul{
+    list-style: none;
+    padding: 0;
+}
+
+nav li{
+    display: inline;
+}
+
+nav a{
+    text-decoration: none;
+    color: black;
+    padding: 15px;
+    font-weight: bold;
+    font-size: 18px;
+    transition: 300ms ease-in-out;
+    margin: 0 1vw;
+}
+
+nav a:hover{
+    font-size: 24px;
+}
+
+/* General Body */
+
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+h1{
+    text-align: center;
+    margin-top: 5vh;
+}
+
+/* Container */
+.container{
+    margin: 0 5vw;
+}
+
+/* Voter List Page */
+.row{
+    margin-top: 3vh;
+}
+
+table{
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 2vh;
+}
+
+th{
+    background-color: #f4f4f4;
+    padding: 12px;
+    text-align: left;
+    font-weight: bold;
+}
+
+td{
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+tr:hover{
+    background-color: #f9f9f9;
+}
+
+table a{
+    color: black;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+table a:hover{
+    text-decoration: underline;
+}
+
+/* Pagination */
+.pagination{
+    list-style: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 2vh 0;
+}
+
+.pagination li{
+    margin: 0 1vw;
+}
+
+.pagination a{
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+    transition: 300ms ease-in-out;
+}
+
+.pagination a:hover{
+    font-size: 18px;
+}
+
+/* Filter Form */
+h2{
+    margin-left: 0;
+    font-size: 20px;
+}
+
+form{
+    margin-top: 2vh;
+}
+
+form table{
+    width: auto;
+}
+
+select{
+    padding: 8px;
+    font-size: 14px;
+    margin: 5px;
+}
+
+input[type="checkbox"]{
+    margin-right: 5px;
+}
+
+input[type="submit"]{
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: 300ms ease-in-out;
+}
+
+input[type="submit"]:hover{
+    background-color: #45a049;
+}
+
+/* Voter Detail Page */
+h3{
+    margin-top: 3vh;
+    font-size: 18px;
+}
+
+/* Graphs Page */
+.container .container{
+    margin: 3vh 0;
+}

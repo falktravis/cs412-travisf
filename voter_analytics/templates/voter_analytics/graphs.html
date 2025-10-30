@@ -1,0 +1,38 @@
+<!-- File: voter_analytics/templates/voter_analytics/graphs.html -->
+<!-- Author: Travis Falk(travisf@bu.edu), 10/29/2025 -->
+<!-- Description: Template to display graphs of voter data -->
+
+{% extends 'voter_analytics/base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1>Voter Analytics Graphs</h1>
+    
+    <!-- Search form -->
+    <div class="row">
+        {% include "voter_analytics/search.html" %}    
+    </div>
+    
+    <!-- Graph 1: Birth Year Distribution -->
+    <div class="container">
+        <div class="row">
+            {{graph_div_birth_year|safe}}
+        </div>
+    </div>
+    
+    <!-- Graph 2: Party Affiliation Distribution -->
+    <div class="container">
+        <div class="row">
+            {{graph_div_party|safe}}
+        </div>
+    </div>
+    
+    <!-- Graph 3: Election Participation -->
+    <div class="container">
+        <div class="row">
+            {{graph_div_elections|safe}}
+        </div>
+    </div>
+    
+</div>    
+{% endblock %}

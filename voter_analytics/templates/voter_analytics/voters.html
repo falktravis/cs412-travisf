@@ -1,0 +1,63 @@
+<!-- File: voter_analytics/templates/voter_analytics/voters.html -->
+<!-- Author: Travis Falk(travisf@bu.edu), 10/29/2025 -->
+<!-- Description: Template to display list of all voters with filtering -->
+
+{% extends 'voter_analytics/base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1>Voter List</h1>
+    
+    <!-- Search form -->
+    <div class="row">
+        {% include "voter_analytics/search.html" %}    
+    </div>
+    
+    <!-- navigation links for different pages of results -->
+    <div class="row">
+        {% if is_paginated %}
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+                <li>
+                    <span><a href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ page_obj.previous_page_number }}">Previous</a></span>
+                </li>
+            {% endif %}
+                <li class="">
+                    <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.</span>
+                </li>
+            {% if page_obj.has_next %}
+                <li>
+                    <span><a href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ page_obj.next_page_number }}">Next</a></span>
+                </li>
+            {% endif %}
+        </ul>
+        {% endif %}
+    </div>
+    
+    <!-- table of voters -->
+    <div class="row">
+        <table border="1">
+            <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Street Address</th>
+                <th>Date of Birth</th>
+                <th>Party Affiliation</th>
+                <th>Voter Score</th>
+            </tr>
+    
+            {% for v in voters %}
+            <tr>
+                <td><a href="{% url 'voter' v.pk %}">{{v.first_name}}</a></td>
+                <td>{{v.last_name}}</td>
+                <td>{{v.street_number}} {{v.street_name}} {% if v.apartment_number %}{{v.apartment_number}}{% endif %}</td>
+                <td>{{v.date_of_birth}}</td>
+                <td>{{v.party_affiliation}}</td>
+                <td>{{v.voter_score}}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+</div>    
+{% endblock %}
