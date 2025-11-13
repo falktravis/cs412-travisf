@@ -1,3 +1,7 @@
+# File: urls.py
+# Author: Travis Falk (travisf@bu.edu), 11/13/2025
+# Description: URL patterns for dadjokes app
+
 from django.urls import path
 from .views import (
     RandomView, ShowAllJokesView, ShowJokeDetailView, 

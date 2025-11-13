@@ -1,3 +1,7 @@
+# File: models.py
+# Author: Travis Falk (travisf@bu.edu), 11/13/2025
+# Description: Model definitions for dadjokes app
+
 from django.db import models
 
 # Create your models here.

@@ -1,3 +1,7 @@
+# File: admin.py
+# Author: Travis Falk (travisf@bu.edu), 11/13/2025
+# Description: Admin config for dadjokes app
+
 from django.contrib import admin
 
 from .models import Joke

@@ -1,3 +1,7 @@
+# File: serializers.py
+# Author: Travis Falk (travisf@bu.edu), 11/13/2025
+# Description: Serializer definitions for dadjokes app REST API
+
 from rest_framework import serializers
 from .models import Joke, Picture
 
