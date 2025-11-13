@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+    <nav>
+        <a href="{% url 'random_joke_picture' %}">Random</a>
+        <a href="{% url 'show_all_jokes' %}">All Jokes</a>
+        <a href="{% url 'show_all_pictures' %}">All Pictures</a>
+    </nav>
+    
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+</body>
+</html>

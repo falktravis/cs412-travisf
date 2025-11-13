@@ -1,0 +1,29 @@
+{% extends 'dadjokes/base.html' %}
+
+{% block content %}
+<h1>Random Dad Joke & Picture</h1>
+
+{% if joke %}
+<div>
+    <h2>Joke:</h2>
+    <p>{{ joke.text }}</p>
+    <p>- Contributed by {{ joke.contributor }}</p>
+</div>
+{% else %}
+<p>No jokes available.</p>
+{% endif %}
+
+{% if picture %}
+<div>
+    <h2>Silly Picture:</h2>
+    <img src="{{ picture.image_url }}">
+    <p>- Contributed by {{ picture.contributor }}</p>
+</div>
+{% else %}
+<p>No pictures available.</p>
+{% endif %}
+
+<div>
+    <a href="{% url 'random' %}">Get Another Random Joke & Picture</a>
+</div>
+{% endblock %}

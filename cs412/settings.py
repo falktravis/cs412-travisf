@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-j56=hms2y1@15a2l$b6o%!at&&_!mgucf%lkfi&*sxaa&x8qaf
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['cs-webapps.bu.edu', 'localhost',]
+ALLOWED_HOSTS = ['cs-webapps.bu.edu', 'localhost', '127.0.0.1',]
 
 
 # Application definition
@@ -41,10 +41,14 @@ INSTALLED_APPS = [
     'restaurant', # Assignment #2
     'mini_insta', # Assignment #3
     'voter_analytics', # Assignment #8
+    'dadjokes', # Assignment - Full Stack
+    'rest_framework', # Django REST Framework
+    'corsheaders', # Django CORS Headers
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -144,3 +148,24 @@ CS_DEPLOYMENT_HOSTNAME = 'cs-webapps.bu.edu'
 if socket.gethostname() == CS_DEPLOYMENT_HOSTNAME:
     STATIC_URL = '/travisf/static/'
     MEDIA_URL = '/travisf/media/'
+
+# Django REST Framework configuration
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10
+}
+
+# Django CORS Headers configuration
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:8081',
+    'http://127.0.0.1:8081',
+    'https://cs-webapps.bu.edu',
+]
+
+CORS_ALLOW_METHODS = [
+    'GET',
+    'POST',
+    'PUT',
+    'DELETE',
+    'OPTIONS',
+]
