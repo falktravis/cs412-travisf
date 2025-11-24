@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'mini_insta', # Assignment #3
     'voter_analytics', # Assignment #8
     'dadjokes', # Assignment - Full Stack
+    'project', # Final Project
     'rest_framework', # Django REST Framework
     'corsheaders', # Django CORS Headers
 ]
