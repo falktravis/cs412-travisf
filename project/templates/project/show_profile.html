@@ -1,0 +1,65 @@
+<!-- File: project/templates/project/show_profile.html -->
+<!-- Author: Travis Falk(travisf@bu.edu), 12/2/2025 -->
+<!-- Description: Show Profile Dashboard Template -->
+
+{% extends 'project/base.html' %}
+
+{% block content %}
+<div class="profile-detail">
+    <h2>{{ profile.first_name }} {{ profile.last_name }}</h2>
+    <p><strong>Company:</strong> {{ profile.company }}</p>
+    <p><strong>Email:</strong> {{ profile.email }}</p>
+    <p><a href="{% url 'update_profile' %}">Update Profile</a></p>
+    
+    <div class="profile-info">
+        <div class="create-list-options">
+            <h3>Create a New Marketing List</h3>
+            <div class="builder-buttons">
+                <a href="{% url 'create_list' %}" class="builder-option">
+                    <div class="builder-icon">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
+                    </div>
+                    <h4>Address-Based Builder</h4>
+                    <p>Enter an address and radius to find properties</p>
+                </a>
+                
+                <a href="{% url 'create_list_map' %}" class="builder-option">
+                    <div class="builder-icon">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path>
+                        </svg>
+                    </div>
+                    <h4>Interactive Map Builder</h4>
+                    <p>Click on a map to visually select your area</p>
+                </a>
+            </div>
+        </div>
+        
+        <h3>Your Marketing Lists</h3>
+        {% if lists %}
+            <div class="lists">
+                {% for list in lists %}
+                    <div class="list-card">
+                        <a href="{% url 'show_list' list.pk %}">
+                            <h4>{{ list.list_name }}</h4>
+                        </a>
+                        <p><strong>Properties:</strong> {{ list.get_property_count }}</p>
+                        <p><strong>Created:</strong> {{ list.creation_date|date:"F j, Y" }}</p>
+                        <p>{{ list.notes|truncatewords:20 }}</p>
+                        <div class="list-actions">
+                            <a href="{% url 'update_list' list.pk %}"><button>Edit</button></a>
+                            <a href="{% url 'delete_list' list.pk %}"><button>Delete</button></a>
+                            <a href="{% url 'export_list' list.pk %}"><button>Export CSV</button></a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>You haven't created any marketing lists yet.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

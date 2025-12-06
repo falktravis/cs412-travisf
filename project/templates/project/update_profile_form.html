@@ -1,0 +1,23 @@
+<!-- File: project/templates/project/update_profile_form.html -->
+<!-- Author: Travis Falk(travisf@bu.edu), 12/2/2025 -->
+<!-- Description: Update Profile Form Template -->
+
+{% extends 'project/base.html' %}
+
+{% block content %}
+<div class="update-profile-container">
+  <h2>Update Your Profile</h2>
+  
+  <form method="post" action="{% url 'update_profile' %}" class="update-profile-form">
+    {% csrf_token %}
+    <table>
+      {{ form.as_table }}
+    </table>
+    
+    <div class="update-profile-buttons">
+      <input type="submit" name="submit" value="Save Changes" class="submit-btn">
+      <a href="{% url 'show_profile' %}"><input type="button" value="Cancel" class="cancel-btn"></a>
+    </div>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,57 @@
+<!-- File: project/templates/project/update_list_form.html -->
+<!-- Author: Travis Falk(travisf@bu.edu), 12/2/2025 -->
+<!-- Description: Update List Form Template -->
+
+{% extends 'project/base.html' %}
+
+{% block content %}
+<div class="create-list-container">
+  <h2>Edit Marketing List</h2>
+  <p>Update the list details. Changing the address or radius will recalculate which properties are included.</p>
+  
+  <div class="create-list-form">
+    <form method="post" action="{% url 'update_list' object.pk %}" id="updateListForm">
+      {% csrf_token %}
+      
+      <div class="form-group">
+        <label for="{{ form.list_name.id_for_label }}">List Name:</label>
+        {{ form.list_name }}
+      </div>
+      
+      <div class="form-group">
+        <label for="{{ form.notes.id_for_label }}">Notes (optional):</label>
+        {{ form.notes }}
+      </div>
+      
+      <div class="form-group">
+        <label for="{{ form.center_address.id_for_label }}">Center Address:</label>
+        {{ form.center_address }}
+        <small>e.g., "Boston Common, Boston, MA" or "123 Main St, Cambridge, MA"</small>
+      </div>
+      
+      <div class="form-group">
+        <label for="{{ form.radius_miles.id_for_label }}">Radius: <span id="radiusValue">{{ object.radius_miles }}</span> miles</label>
+        <input type="range" name="radius_miles" id="radius_input" min="0.1" max="10" step="0.1" value="{{ object.radius_miles }}">
+      </div>
+      
+      <div class="form-buttons">
+        <button type="submit" class="submit-btn" id="submitBtn">Save Changes</button>
+        <a href="{% url 'show_list' object.pk %}"><button type="button" class="cancel-btn">Cancel</button></a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  // Update radius display value as slider moves
+  const radiusSlider = document.getElementById('radius_input');
+  const radiusDisplay = document.getElementById('radiusValue');
+  
+  if (radiusSlider && radiusDisplay) {
+    // Update on input
+    radiusSlider.addEventListener('input', function(e) {
+      radiusDisplay.textContent = parseFloat(e.target.value).toFixed(1);
+    });
+  }
+</script>
+{% endblock %}

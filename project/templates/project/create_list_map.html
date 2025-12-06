@@ -1,0 +1,177 @@
+<!-- File: project/templates/project/create_list_map.html -->
+<!-- Author: Travis Falk(travisf@bu.edu), 12/3/2025 -->
+<!-- Description: Create List with Map Interface Template -->
+
+{% extends 'project/base.html' %}
+
+{% block content %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<div class="create-list-container">
+  <h2>Create Marketing List with Map</h2>
+  <p>Click on the map to set a center point, then adjust the radius slider to select properties within that area.</p>
+  
+  <div class="map-builder-callout">
+    <div class="callout-content">
+      <svg class="callout-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+      </svg>
+      <div>
+        <strong>Prefer entering an address?</strong>
+        <p>Try our address-based builder to search by street address and radius</p>
+      </div>
+      <a href="{% url 'create_list' %}" class="map-builder-btn">Use Address Builder</a>
+    </div>
+  </div>
+  
+  <div class="map-builder-interface">
+    <!-- Map Container -->
+    <div id="map"></div>
+    
+    <!-- Controls Panel -->
+    <div class="map-controls-panel">
+      
+      <form method="post" action="{% url 'create_list_map' %}" id="mapListForm">
+        {% csrf_token %}
+        
+        <div class="form-group">
+          <label for="{{ form.list_name.id_for_label }}">List Name:</label>
+          {{ form.list_name }}
+        </div>
+        
+        <div class="form-group">
+          <label for="{{ form.notes.id_for_label }}">Notes (optional):</label>
+          {{ form.notes }}
+        </div>
+        
+        <div class="form-group">
+          <label for="{{ form.radius_miles.id_for_label }}">Radius: <span id="radiusValue">1.0</span> miles</label>
+          <input type="range" name="radius_miles" id="radius_input" min="0.1" max="10" step="0.1" value="1.0">
+        </div>
+        
+        <!-- Hidden fields for coordinates -->
+        <input type="hidden" name="center_lat" id="center_lat">
+        <input type="hidden" name="center_lon" id="center_lon">
+        
+        <div class="form-buttons">
+          <button type="submit" class="submit-btn" id="submitBtn" disabled>Create List</button>
+          <a href="{% url 'show_profile' %}"><button type="button" class="cancel-btn">Cancel</button></a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  // I followed the Leaflet Quick Start guide to get the map up and running
+  // Source: https://leafletjs.com/examples/quick-start/
+  var map = L.map('map').setView([42.3601, -71.0589], 11); // Centered on Boston
+  
+  // Adding the tile layer (the actual map images)
+  // Copied from the OpenStreetMap example
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+  }).addTo(map);
+  
+  // Global variables to keep track of what the user selects
+  var centerMarker = null;
+  var radiusCircle = null;
+  
+  // I found this custom icon code on GitHub because the default blue marker wasn't standing out enough
+  // Source: https://github.com/pointhi/leaflet-color-markers
+  var redIcon = new L.Icon({
+    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41]
+  });
+
+  // Function to handle map clicks
+  // Based on the "Dealing with events" section in Leaflet docs
+  function onMapClick(e) {
+    var lat = e.latlng.lat;
+    var lon = e.latlng.lng;
+    
+    // If there is already a marker/circle, remove them so we don't have duplicates
+    if (centerMarker) {
+        map.removeLayer(centerMarker);
+    }
+    if (radiusCircle) {
+        map.removeLayer(radiusCircle);
+    }
+    
+    // Add the new marker at the clicked location
+    centerMarker = L.marker([lat, lon], {icon: redIcon}).addTo(map);
+    
+    // Get the radius from the slider
+    var radiusMiles = document.getElementById('radius_input').value;
+    
+    // Leaflet circles use meters, so I have to convert miles to meters
+    // 1 mile is approx 1609.34 meters
+    var radiusMeters = radiusMiles * 1609.34;
+    
+    // Add the circle to show the area
+    // I liked this blue color from a tutorial I saw
+    radiusCircle = L.circle([lat, lon], {
+      color: '#667eea',
+      fillColor: '#667eea',
+      fillOpacity: 0.1,
+      radius: radiusMeters
+    }).addTo(map);
+    
+    // IMPORTANT: Put the lat/lon into the hidden form fields so Django can see them
+    document.getElementById('center_lat').value = lat;
+    document.getElementById('center_lon').value = lon;
+    
+    // Enable the submit button now that we have a location
+    document.getElementById('submitBtn').disabled = false;
+  }
+  
+  // Register the click event
+  map.on('click', onMapClick);
+  
+  // Update the circle when the slider moves
+  document.getElementById('radius_input').addEventListener('input', function(e) {
+    // Update the text number next to the slider
+    var radiusMiles = e.target.value;
+    document.getElementById('radiusValue').innerText = parseFloat(radiusMiles).toFixed(1);
+    
+    // If we have a marker, we need to redraw the circle with the new radius
+    if (centerMarker) {
+        // Get current position
+        var lat = document.getElementById('center_lat').value;
+        var lon = document.getElementById('center_lon').value;
+        
+        // Remove old circle
+        if (radiusCircle) {
+            map.removeLayer(radiusCircle);
+        }
+        
+        // Calculate new meters
+        var radiusMeters = radiusMiles * 1609.34;
+        
+        // Add new circle
+        radiusCircle = L.circle([lat, lon], {
+            color: '#667eea',
+            fillColor: '#667eea',
+            fillOpacity: 0.1,
+            radius: radiusMeters
+        }).addTo(map);
+    }
+  });
+  
+  // Make sure they clicked the map before submitting
+  document.getElementById('mapListForm').addEventListener('submit', function(e) {
+    var lat = document.getElementById('center_lat').value;
+    if (!lat) {
+        e.preventDefault(); // Stop form submission
+        alert('Please click on the map to set a center point first.');
+    }
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,67 @@
+<!-- File: project/templates/project/show_list.html -->
+<!-- Author: Travis Falk(travisf@bu.edu), 12/2/2025 -->
+<!-- Description: Show List Detail Template -->
+
+{% extends 'project/base.html' %}
+
+{% block content %}
+<div class="list-detail">
+    <h2>{{ list.list_name }}</h2>
+    
+    <div class="list-info">
+        <p><strong>Created:</strong> {{ list.creation_date|date:"F j, Y" }}</p>
+        <p><strong>Total Properties:</strong> {{ list.get_property_count }}</p>
+        <p><strong>Total Assessed Value:</strong> ${{ list.get_total_assessed_value|floatformat:0 }}</p>
+        
+        {% if list.center_address %}
+            <p><strong>Center Point:</strong> {{ list.center_address }}</p>
+            <p><strong>Radius:</strong> {{ list.radius_miles }} miles</p>
+            <p><strong>Coordinates:</strong> {{ list.center_lat }}, {{ list.center_lon }}</p>
+        {% endif %}
+        
+        {% if list.notes %}
+            <p><strong>Notes:</strong> {{ list.notes }}</p>
+        {% endif %}
+        
+        <div class="list-actions">
+            <a href="{% url 'update_list' list.pk %}"><button>Edit List</button></a>
+            <a href="{% url 'delete_list' list.pk %}"><button>Delete List</button></a>
+            <a href="{% url 'export_list' list.pk %}"><button>Export to CSV</button></a>
+        </div>
+    </div>
+    
+    <h3>Properties in This List (Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }})</h3>
+    <div class="properties-in-list">
+        {% for property in properties %}
+            <div class="property-card">
+                <a href="{% url 'show_property' property.pk %}">
+                    <h3>{{ property.address }}</h3>
+                    <p><strong>City:</strong> {{ property.city }}, <strong>ZIP:</strong> {{ property.zip_code }}</p>
+                    <p><strong>Style:</strong> {{ property.style }}</p>
+                    <p><strong>Owner:</strong> {{ property.owner.name }}</p>
+                    <p><strong>Assessed Value:</strong> ${{ property.assessed_value|floatformat:0 }}</p>
+                </a>
+            </div>
+        {% empty %}
+            <p>No properties in this list yet.</p>
+        {% endfor %}
+    </div>
+    
+    <!-- Pagination Controls -->
+    <div class="pagination">
+        {% if page_obj.has_previous %}
+            <a href="?page=1" class="page-link">&laquo; First</a>
+            <a href="?page={{ page_obj.previous_page_number }}" class="page-link">Previous</a>
+        {% endif %}
+        
+        <span class="page-current">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+        
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}" class="page-link">Next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}" class="page-link">Last &raquo;</a>
+        {% endif %}
+    </div>
+    
+    <p><a href="{% url 'show_profile' %}">Back to All Lists</a></p>
+</div>
+{% endblock %}

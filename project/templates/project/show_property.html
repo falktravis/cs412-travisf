@@ -1,0 +1,28 @@
+<!-- File: project/templates/project/show_property.html -->
+<!-- Author: Travis Falk(travisf@bu.edu), 12/2/2025 -->
+<!-- Description: Show Property Detail Template -->
+
+{% extends 'project/base.html' %}
+
+{% block content %}
+<div class="property-detail">
+    <h2>{{ property.address }}</h2>
+    
+    <div class="property-info">
+        <p><strong>Full Address:</strong> {{ property.address }}, {{ property.city }}, MA {{ property.zip_code }}</p>
+        <p><strong>Style:</strong> {{ property.style }}</p>
+        <p><strong>Year Built:</strong> {{ property.year_built }}</p>
+        <p><strong>Owner:</strong> {{ property.owner.name }}</p>
+        <p><strong>Owner Address:</strong> {{ property.owner.address }}</p>
+        <p><strong>Owner Type:</strong> {% if property.owner.is_company %}Company{% else %}Individual{% endif %}</p>
+        <p><strong>Assessed Value:</strong> ${{ property.assessed_value|floatformat:0 }}</p>
+        <p><strong>Location:</strong> {{ property.lat }}, {{ property.lon }}</p>
+    </div>
+    
+    <div class="property-actions">
+        {% if request.user.is_authenticated %}
+            <p><a href="{% url 'show_all_properties' %}">Back to All Properties</a></p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

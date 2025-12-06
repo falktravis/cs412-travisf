@@ -1,0 +1,87 @@
+<!-- File: project/templates/project/show_all_properties.html -->
+<!-- Author: Travis Falk(travisf@bu.edu), 12/2/2025 -->
+<!-- Description: Show All Properties Template -->
+
+{% extends 'project/base.html' %}
+
+{% block content %}
+<h1>Massachusetts Properties Database</h1>
+
+<div class="filter-section">
+    <h3>Filter Properties</h3>
+    <form method="get" action="{% url 'show_all_properties' %}" class="filter-form">
+        <div class="filter-row filter-top-row">
+            <label for="search">Search Address:</label>
+            <input type="text" name="search" id="search" value="{{ search_filter }}" placeholder="e.g. 123 Main St">
+        </div>
+
+        <div class="filter-row">
+            <label for="city">City:</label>
+            <select name="city" id="city">
+                <option value="">All Cities</option>
+                {% for city in cities %}
+                    <option value="{{ city }}" {% if city == city_filter %}selected{% endif %}>{{ city }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <div class="filter-row">
+            <label for="zip_code">ZIP Code:</label>
+            <select name="zip_code" id="zip_code">
+                <option value="">All ZIP Codes</option>
+                {% for zip in zip_codes %}
+                    <option value="{{ zip }}" {% if zip == zip_filter %}selected{% endif %}>{{ zip }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <div class="filter-row">
+            <label for="min_value">Min Value:</label>
+            <input type="number" name="min_value" id="min_value" value="{{ min_value_filter }}" placeholder="$0">
+        </div>
+        
+        <div class="filter-row">
+            <label for="max_value">Max Value:</label>
+            <input type="number" name="max_value" id="max_value" value="{{ max_value_filter }}" placeholder="Any">
+        </div>
+        
+        <div class="filter-buttons">
+            <input type="submit" value="Apply Filters" class="submit-btn">
+            <a href="{% url 'show_all_properties' %}"><input type="button" value="Clear Filters" class="cancel-btn"></a>
+        </div>
+    </form>
+</div>
+
+<p><strong>Showing {{ properties|length }} properties</strong> (Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }})</p>
+
+<div class="properties-list">
+    {% for property in properties %}
+        <div class="property-card">
+            <a href="{% url 'show_property' property.pk %}">
+                <h3>{{ property.address }}</h3>
+                <p><strong>City:</strong> {{ property.city }}, <strong>ZIP:</strong> {{ property.zip_code }}</p>
+                <p><strong>Style:</strong> {{ property.style }}</p>
+
+                <p><strong>Owner:</strong> {{ property.owner.name }}</p>
+                <p><strong>Assessed Value:</strong> ${{ property.assessed_value|floatformat:0 }}</p>
+            </a>
+        </div>
+    {% endfor %}
+</div>
+
+<!-- Pagination Controls -->
+<div class="pagination">
+    {% if page_obj.has_previous %}
+        <a href="?page=1{% if search_filter %}&search={{ search_filter }}{% endif %}{% if city_filter %}&city={{ city_filter }}{% endif %}{% if zip_filter %}&zip_code={{ zip_filter }}{% endif %}{% if min_value_filter %}&min_value={{ min_value_filter }}{% endif %}{% if max_value_filter %}&max_value={{ max_value_filter }}{% endif %}" class="page-link">&laquo; First</a>
+        <a href="?page={{ page_obj.previous_page_number }}{% if search_filter %}&search={{ search_filter }}{% endif %}{% if city_filter %}&city={{ city_filter }}{% endif %}{% if zip_filter %}&zip_code={{ zip_filter }}{% endif %}{% if min_value_filter %}&min_value={{ min_value_filter }}{% endif %}{% if max_value_filter %}&max_value={{ max_value_filter }}{% endif %}" class="page-link">Previous</a>
+    {% endif %}
+    
+    <span class="page-current">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+    
+    {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}{% if search_filter %}&search={{ search_filter }}{% endif %}{% if city_filter %}&city={{ city_filter }}{% endif %}{% if zip_filter %}&zip_code={{ zip_filter }}{% endif %}{% if min_value_filter %}&min_value={{ min_value_filter }}{% endif %}{% if max_value_filter %}&max_value={{ max_value_filter }}{% endif %}" class="page-link">Next</a>
+        <a href="?page={{ page_obj.paginator.num_pages }}{% if search_filter %}&search={{ search_filter }}{% endif %}{% if city_filter %}&city={{ city_filter }}{% endif %}{% if zip_filter %}&zip_code={{ zip_filter }}{% endif %}{% if min_value_filter %}&min_value={{ min_value_filter }}{% endif %}{% if max_value_filter %}&max_value={{ max_value_filter }}{% endif %}" class="page-link">Last &raquo;</a>
+    {% endif %}
+</div>
+{% endblock %}
+

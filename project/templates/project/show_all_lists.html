@@ -1,0 +1,40 @@
+<!-- File: project/templates/project/show_all_lists.html -->
+<!-- Author: Travis Falk(travisf@bu.edu), 12/2/2025 -->
+<!-- Description: Show All Lists Template -->
+
+{% extends 'project/base.html' %}
+
+{% block content %}
+<h1>Your Marketing Lists</h1>
+
+<div class="lists-container">
+    {% if lists %}
+        {% for list in lists %}
+            <div class="list-card">
+                <a href="{% url 'show_list' list.pk %}">
+                    <h3>{{ list.list_name }}</h3>
+                </a>
+                <p><strong>Properties:</strong> {{ list.get_property_count }}</p>
+                <p><strong>Total Value:</strong> ${{ list.get_total_assessed_value|floatformat:0 }}</p>
+                <p><strong>Created:</strong> {{ list.creation_date|date:"F j, Y" }}</p>
+                {% if list.center_address %}
+                    <p><strong>Center:</strong> {{ list.center_address }}</p>
+                    <p><strong>Radius:</strong> {{ list.radius_miles }} miles</p>
+                {% endif %}
+                <p>{{ list.notes|truncatewords:30 }}</p>
+                <div class="list-actions">
+                    <a href="{% url 'show_list' list.pk %}"><button>View</button></a>
+                    <a href="{% url 'update_list' list.pk %}"><button>Edit</button></a>
+                    <a href="{% url 'delete_list' list.pk %}"><button>Delete</button></a>
+                    <a href="{% url 'export_list' list.pk %}"><button>Export CSV</button></a>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>You haven't created any marketing lists yet.</p>
+        <p><a href="{% url 'create_list' %}"><button>Create Your First List</button></a></p>
+    {% endif %}
+</div>
+
+<p><a href="{% url 'create_list' %}"><button>Create New List</button></a></p>
+{% endblock %}

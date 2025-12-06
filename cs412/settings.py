@@ -150,6 +150,11 @@ if socket.gethostname() == CS_DEPLOYMENT_HOSTNAME:
     STATIC_URL = '/travisf/static/'
     MEDIA_URL = '/travisf/media/'
 
+# Authentication settings
+LOGIN_URL = '/project/login/'
+LOGIN_REDIRECT_URL = '/project/'
+LOGOUT_REDIRECT_URL = '/project/logout_confirmation/'
+
 # Django REST Framework configuration
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',

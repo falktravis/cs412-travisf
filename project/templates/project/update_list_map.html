@@ -1,0 +1,178 @@
+<!-- File: project/templates/project/update_list_map.html -->
+<!-- Author: Travis Falk(travisf@bu.edu), 12/4/2025 -->
+<!-- Description: Update List with Map Interface Template -->
+
+{% extends 'project/base.html' %}
+
+{% block content %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<div class="create-list-container">
+  <h2>Edit Marketing List (Map)</h2>
+  <p>Update the list details. Adjust the center point or radius to recalculate properties.</p>
+  
+  <div class="map-builder-interface">
+    <!-- Map Container -->
+    <div id="map"></div>
+    
+    <!-- Controls Panel -->
+    <div class="map-controls-panel">
+      
+      <form method="post" action="{% url 'update_list' object.pk %}" id="mapListForm">
+        {% csrf_token %}
+        
+        <div class="form-group">
+          <label for="{{ form.list_name.id_for_label }}">List Name:</label>
+          {{ form.list_name }}
+        </div>
+        
+        <div class="form-group">
+          <label for="{{ form.notes.id_for_label }}">Notes (optional):</label>
+          {{ form.notes }}
+        </div>
+        
+        <div class="form-group">
+          <label for="{{ form.radius_miles.id_for_label }}">Radius: <span id="radiusValue">{{ object.radius_miles }}</span> miles</label>
+          <input type="range" name="radius_miles" id="radius_input" min="0.1" max="10" step="0.1" value="{{ object.radius_miles }}">
+        </div>
+        
+        <!-- Hidden fields for coordinates -->
+        <input type="hidden" name="center_lat" id="center_lat" value="{{ object.center_lat }}">
+        <input type="hidden" name="center_lon" id="center_lon" value="{{ object.center_lon }}">
+        
+        <div class="form-buttons">
+          <button type="submit" class="submit-btn" id="submitBtn">Save Changes</button>
+          <a href="{% url 'show_list' object.pk %}"><button type="button" class="cancel-btn">Cancel</button></a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Get initial values from Django template
+  // I had to look up how to pass variables from Django to JS
+  var initialLat = parseFloat("{{ object.center_lat }}");
+  var initialLon = parseFloat("{{ object.center_lon }}");
+  var initialRadius = parseFloat("{{ object.radius_miles }}");
+
+  // Initialize map centered on existing list center
+  // Source: https://leafletjs.com/examples/quick-start/
+  var map = L.map('map').setView([initialLat, initialLon], 11);
+  
+  // Add OpenStreetMap tiles
+  // Copied from the OpenStreetMap example
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+  }).addTo(map);
+  
+  // Global variables to keep track of what the user selects
+  var centerMarker = null;
+  var radiusCircle = null;
+  
+  // I found this custom icon code on GitHub because the default blue marker wasn't standing out enough
+  // Source: https://github.com/pointhi/leaflet-color-markers
+  var redIcon = new L.Icon({
+    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41]
+  });
+
+  // Since this is the update page, we need to show the existing marker/circle immediately
+  
+  // Add the marker
+  centerMarker = L.marker([initialLat, initialLon], {icon: redIcon}).addTo(map);
+  
+  // Add the circle (convert miles to meters)
+  // 1 mile is approx 1609.34 meters
+  var initialRadiusMeters = initialRadius * 1609.34;
+  radiusCircle = L.circle([initialLat, initialLon], {
+    color: '#667eea',
+    fillColor: '#667eea',
+    fillOpacity: 0.1,
+    radius: initialRadiusMeters
+  }).addTo(map);
+  
+  // Function to handle map clicks
+  // Based on the "Dealing with events" section in Leaflet docs
+  function onMapClick(e) {
+    var lat = e.latlng.lat;
+    var lon = e.latlng.lng;
+    
+    // If there is already a marker/circle, remove them so we don't have duplicates
+    if (centerMarker) {
+        map.removeLayer(centerMarker);
+    }
+    if (radiusCircle) {
+        map.removeLayer(radiusCircle);
+    }
+    
+    // Add the new marker at the clicked location
+    centerMarker = L.marker([lat, lon], {icon: redIcon}).addTo(map);
+    
+    // Get the radius from the slider
+    var radiusMiles = document.getElementById('radius_input').value;
+    
+    // Leaflet circles use meters, so I have to convert miles to meters
+    var radiusMeters = radiusMiles * 1609.34;
+    
+    // Add the circle to show the area
+    radiusCircle = L.circle([lat, lon], {
+      color: '#667eea',
+      fillColor: '#667eea',
+      fillOpacity: 0.1,
+      radius: radiusMeters
+    }).addTo(map);
+    
+    // IMPORTANT: Put the lat/lon into the hidden form fields so Django can see them
+    document.getElementById('center_lat').value = lat;
+    document.getElementById('center_lon').value = lon;
+  }
+  
+  // Register the click event
+  map.on('click', onMapClick);
+  
+  // Update the circle when the slider moves
+  document.getElementById('radius_input').addEventListener('input', function(e) {
+    // Update the text number next to the slider
+    var radiusMiles = e.target.value;
+    document.getElementById('radiusValue').innerText = parseFloat(radiusMiles).toFixed(1);
+    
+    // If we have a marker, we need to redraw the circle with the new radius
+    if (centerMarker) {
+        // Get current position
+        var lat = document.getElementById('center_lat').value;
+        var lon = document.getElementById('center_lon').value;
+        
+        // Remove old circle
+        if (radiusCircle) {
+            map.removeLayer(radiusCircle);
+        }
+        
+        // Calculate new meters
+        var radiusMeters = radiusMiles * 1609.34;
+        
+        // Add new circle
+        radiusCircle = L.circle([lat, lon], {
+            color: '#667eea',
+            fillColor: '#667eea',
+            fillOpacity: 0.1,
+            radius: radiusMeters
+        }).addTo(map);
+    }
+  });
+  
+  // Form submission validation
+  document.getElementById('mapListForm').addEventListener('submit', function(e) {
+    if (!document.getElementById('center_lat').value) {
+      e.preventDefault();
+      alert('Please click on the map to set a center point first.');
+    }
+  });
+</script>
+{% endblock %}

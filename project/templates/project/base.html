@@ -1,0 +1,50 @@
+<!-- File: project/templates/project/base.html -->
+<!-- Author: Travis Falk(travisf@bu.edu), 12/2/2025 -->
+<!-- Description: Base Template for Project App -->
+
+
+{% load static %}
+<html lang="en">
+    <head>
+        <title>Property Marketing Lists</title>
+        <link rel="stylesheet" type="text/css" href="{% static 'project_styles.css' %}">
+    </head>
+
+        <!-- Navigation Bar -->
+    <nav>
+        <div class="nav-left">
+            {% if request.user.is_authenticated and viewer_profile %}
+                <a href="{% url 'show_profile' %}">Dashboard</a>
+                <a href="{% url 'show_all_properties' %}">Browse Properties</a>
+            {% endif %}
+        </div>
+        
+        <div class="nav-right">
+            {% if request.user.is_authenticated %}
+                <span class="user-status">Logged in as: {{ request.user.username }}</span>
+                <form method="post" action="{% url 'logout' %}" class="logout-form">
+                    {% csrf_token %}
+                    <button type="submit" class="logout-btn">Logout</button>
+                </form>
+            {% else %}
+                <a href="{% url 'login' %}">Login</a>
+                <a href="{% url 'create_profile' %}">Sign Up</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <body>
+        <main>
+            {% block content %}
+            {% endblock %}
+        </main>
+    </body>
+
+    <footer>
+        {% if request.user.is_authenticated and viewer_profile %}
+            <a href="{% url 'show_all_properties' %}">Browse Properties</a>
+            <a href="{% url 'show_profile' %}">Dashboard</a>
+        {% endif %}
+    </footer>
+</html>

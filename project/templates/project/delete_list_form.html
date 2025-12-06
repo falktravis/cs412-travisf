@@ -1,0 +1,28 @@
+<!-- File: project/templates/project/delete_list_form.html -->
+<!-- Author: Travis Falk(travisf@bu.edu), 12/2/2025 -->
+<!-- Description: Delete List Form Template -->
+
+{% extends 'project/base.html' %}
+
+{% block content %}
+<div class="delete-list-container">
+  <h3>Delete List?</h3>
+  <p><strong>List Name:</strong> {{ list.list_name }}</p>
+  <p><strong>Properties:</strong> {{ list.get_property_count }}</p>
+  <p><strong>Total Value:</strong> ${{ list.get_total_assessed_value|floatformat:0 }}</p>
+  
+  {% if list.notes %}
+    <p><strong>Notes:</strong> {{ list.notes }}</p>
+  {% endif %}
+  
+  <p><em>This action cannot be undone. Are you sure you want to delete this list?</em></p>
+
+  <form action="{% url 'delete_list' list.pk %}" method="post">
+      {% csrf_token %}
+      <input type="submit" value="Confirm Delete" class="delete-btn">
+  </form>
+  <form action="{% url 'show_list' list.pk %}" method="get">
+      <input type="submit" value="Cancel" class="cancel-btn">
+  </form>
+</div>
+{% endblock %}

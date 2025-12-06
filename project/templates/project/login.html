@@ -1,0 +1,21 @@
+<!-- File: project/templates/project/login.html -->
+<!-- Author: Travis Falk(travisf@bu.edu), 12/2/2025 -->
+<!-- Description: Login Template for Project App -->
+
+{% extends 'project/base.html' %}
+
+{% block content %}
+<div class="login-container">
+    <h1>Login</h1>
+    <form method="post" action="{% url 'login' %}" >
+        {% csrf_token %}
+        {{form}}
+        <input type="submit" value="Login">
+        
+        <input type="hidden" name="next" value="/project/">
+    </form>
+
+    <hr>
+    Don't have an account? <a href="{% url 'create_profile' %}">Register here</a>.
+</div>
+{% endblock %}

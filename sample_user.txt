@@ -1,0 +1,5 @@
+Username: testuser
+Password: testpass123
+
+This is the test user account for reviewing the application.
+The user has sample data including properties and marketing lists.
